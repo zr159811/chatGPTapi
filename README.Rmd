@@ -1,0 +1,123 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+library("chatgpt")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-"
+)
+```
+
+# ChatGPT coding assistant for RStudio
+
+<center>
+    <img width="300" height="400" src="man/figures/chatgpt_meme.jpeg">
+    <p>Meme by Programming Jokes I IT Humor & Memes</p>
+</center>
+
+## Installation
+
+You can install the development version of {chatgpt} from [GitHub](https://github.com/jcrodriguez1989/chatgpt) with:
+
+``` r
+# install.packages("remotes")
+remotes::install_github("jcrodriguez1989/chatgpt")
+```
+
+## Requirements
+
+You need to setup your ChatGPT API key in R.
+
+First you will need to obtain your ChatGPT API key. You can create an API key by accessing [OpenAI API page](https://beta.openai.com/account/api-keys) -don't miss their article about [Best Practices for API Key Safety
+](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety)-.
+
+Then you have to assign your API key for usage in R, this can be done just for the actual session, by doing:
+
+``` r
+Sys.setenv(OPENAI_API_KEY = "XX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+```
+
+Or you can do it persistent (session-wide), by assigning it in your `.Renviron` file. For it, execute `usethis::edit_r_environ()`, and in that file write a line at the end your API key as
+
+``` r
+OPENAI_API_KEY=XX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+## Features
+
+The {chatgpt} R package provides a set of features to assist in R coding. 
+Current existing addins:
+
+```{r, echo=FALSE, results='asis'}
+addins_info <- readLines("inst/rstudio/addins.dcf")
+addins_info <- addins_info[grepl("^(Name: |Description: )", addins_info)]
+addins_info <- gsub("^(Name: |Description: )", "", addins_info)
+indexes <- seq_len(length(addins_info))
+indexes <- indexes[indexes %% 2 == 1]
+cat(paste(
+  sapply(indexes, function(i) paste0(" - **", addins_info[[i]], ":** ", addins_info[[i + 1]])),
+  collapse = "\n"
+))
+```
+
+**Note:** When no code is selected, it will use the whole file's code.
+
+## Code Examples
+
+```{r, echo=FALSE, results='asis'}
+pkg_name <- "chatgpt"
+exported_functions <- sort(getNamespaceExports(pkg_name))
+examples_usage <- sapply(exported_functions, function(exported_function) {
+  function_example <- example(exported_function, pkg_name, character.only = TRUE, give.lines = TRUE)
+  function_example <- function_example[grepl("^##D ", function_example)]
+  function_example <- gsub("^##D ", "", function_example)
+  example_result <- capture.output(eval(parse(text = function_example)))
+  example_result <- gsub("`|'", "", paste0(example_result, collapse = "\n"))
+  paste0(
+    paste0("#### `", exported_function, "`\n\n``` r\n"),
+    paste0("> ", function_example, "\n"),
+    example_result,
+    "\n```",
+    collapse = "\n"
+  )
+})
+cat(paste0("\n", examples_usage, collapse = "\n\n"))
+```
+
+## Additional Parameters
+
+### Disable Console Messages
+
+If you want {chatgpt} not to show messages in console, please set the environment variable `OPENAI_VERBOSE=FALSE`.
+
+### Addin Changes in Place
+
+If you want {chatgpt} addins to take place in the editor -i.e., replace the selected code with the result of the addin execution- then you sould set the environment variable `OPENAI_ADDIN_REPLACE=TRUE`.
+
+### Change the language of ChatGPT responses
+
+To change the language that ChatGPT responds in, the `OPENAI_RETURN_LANGUAGE` environment variable must be changed.
+E.g., 
+
+```{r}
+Sys.setenv("OPENAI_RETURN_LANGUAGE" = "Español")
+cat(chatgpt::explain_code("for (i in 1:10) {\n  print(i ** 2)\n}"))
+```
+
+### ChatGPT Model Tweaks
+
+ChatGPT model parameters can be tweaked by using environment variables.
+
+The following environment variables variables can be set to tweak the behavior, as documented in https://beta.openai.com/docs/api-reference/completions/create .
+
+* `OPENAI_MODEL`; defaults to `"gpt-3.5-turbo"`
+* `OPENAI_MAX_TOKENS`; defaults to `256`
+* `OPENAI_TEMPERATURE`; defaults to `1`
+* `OPENAI_TOP_P`; defaults to `1`
+* `OPENAI_FREQUENCY_PENALTY`; defaults to `0`
+* `OPENAI_PRESENCE_PENALTY`; defaults to `0`
