@@ -5,7 +5,7 @@
 
 This package is a retooling of <https://github.com/jcrodriguez1989/chatgpt> by jcrodriguez1989. I wanted to use their package for research with chatGPT. However, this API package
 forced input prefixes that would prime chatGPT to respond to questions realting to R. While this is great for asking chatGPT to work with R code, I wanted to have API 
-access in an R session without any pre-defined priming (for research purposes). Further, I opened up some additional parameters for research purposes that the OpenAI API provides in
+access in an R session without any pre-defined priming (for research purposes). I also added up some additional parameters for that the OpenAI API provides in
 their documentation.
 
 
@@ -67,7 +67,7 @@ I am an AI language model, so I don't have feelings or emotions. However, I am f
 
 ### Disable Console Messages
 
-If you want {chatgpt} not to show messages in console, please set the
+If you want {chatGPTapi} not to show messages in console, please set the
 environment variable `OPENAI_VERBOSE=FALSE`.
 
 
