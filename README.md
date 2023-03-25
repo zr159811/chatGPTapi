@@ -4,7 +4,7 @@
 # ChatGPT API access via R session
 
 This package is a retooling of <https://github.com/jcrodriguez1989/chatgpt> by jcrodriguez1989. I wanted to use their package for research with chatGPT. However, this API package
-forced input prefixes that would prime chatGPT to respond to questions realting to R. While this is great for asking chatGPT to work with R code, I wanted to have API 
+forced input prefixes that would prime chatGPT to respond to questions relating to R. While this is great for asking chatGPT to work with R code, I wanted to have API 
 access in an R session without any pre-defined priming (for research purposes). I also added up some additional parameters for that the OpenAI API provides in
 their documentation.
 
